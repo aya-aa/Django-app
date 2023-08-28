@@ -9,20 +9,18 @@
 </head>
 <body>
     <h1>Upload Multiple Files</h1>
-    <form method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-        {{ form.as_p }}
-
-        <button type="submit">Upload</button>
-    </form>
-
-<select class="form-select" aria-label="Default select example">
-    <option selected>Select position needed</option>
-    {% for post in posts %}
-    <option value="{{ post.id }}">{{ post.position }}</option>
-    {% endfor %}
-</select>
-
+<form method="post" enctype="multipart/form-data"  >
+    {% csrf_token %}
+    <select class="form-select" aria-label="Default select example">
+        <option selected>Select position needed</option>
+        {% for post in posts %}
+        <option value="{{ post.id }}">{{ post.position }}</option>
+        {% endfor %}
+    </select>
+    <br>
+    {{ form.as_p }}
+    <button type="submit">Upload</button>
+</form>
 
 
 </body>

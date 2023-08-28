@@ -61,6 +61,11 @@ class FileFieldFormView(FormView):
 	template_name = "uploadform.html"
 	success_url = "success/"
 
+	def get_context_data(self, **kwargs):
+		context = super().get_context_data(**kwargs)
+		context['posts'] = Post.objects.all()
+		return context
+
 	def post(self, request, *args, **kwargs):
 		form_class = self.get_form_class()
 		form = self.get_form(form_class)
@@ -114,17 +119,20 @@ class FileFieldFormView(FormView):
 			my_model_instance.skills = skills
 			my_model_instance.save()
 
+			
+
+		posts = Post.objects.all()
 
 
 
 		context = {
 		'form': form,
 		'extracted_data': extracted_data_list,
-		'posts':Post.objects.all(),
+		'posts':posts,
 		}
 		return render(self.request, 'success.html', context)
             
-        #return super().form_valid(form)
+ 
 
 
 

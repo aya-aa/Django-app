@@ -5,24 +5,36 @@
 
 {% if user.is_authenticated %}
 
+
+<head>
+    <title>Upload Success</title>
+</head>
 <body>
-    <h1>Uploaded Files and Extracted Data</h1>
-
-
-
-    <h2>Extracted Data</h2>
+    <h1>Upload Successful!</h1>
+    
+    <h2>Extracted Data:</h2>
     <ul>
         {% for data in extracted_data %}
-        <li> 
-            Name: {{ data.name }}<br>
-            Email: {{ data.email }}<br>
-            Phone: {{ data.number }}<br>
-            Skills: {{ data.skills }}<br>
-            <!-- ... Any other extracted data you want to display ... -->
-        </li>
+            <li>Name: {{ data.name }}</li>
+            <li>Number: {{ data.number }}</li>
+            <li>Email: {{ data.email }}</li>
+            <li>Skills: {{ data.skills }}</li>
         {% endfor %}
     </ul>
+    
+    <h2>Posts:</h2>
+    <select class="form-select" aria-label="Default select example">
+        <option selected>Select position needed</option>
+        {% for post in posts %}
+            <option value="{{ post.id }}">{{ post.position }}</option>
+        {% endfor %}
+    </select>
+    
+    <!-- Other content related to posts -->
+    
 </body>
+
+
 
 
 
