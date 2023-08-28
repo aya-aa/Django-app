@@ -19,6 +19,10 @@ import base64, io, os
 
 
 
+from django.conf import settings
+
+from pathlib import Path
+BASE_DIR = Path(__file__).resolve().parent.parent
 
 
 import spacy
@@ -42,7 +46,6 @@ from pdfminer.pdfinterp import PDFPageInterpreter
 from pdfminer.pdfinterp import PDFResourceManager
 from pdfminer.layout import LAParams
 from pdfminer.pdfpage import PDFPage
-
 
 
 # load pre-trained model
@@ -175,11 +178,20 @@ def extract_education(resume_text):
 
 
 
+import os
 
 def extract_skills(resume_text):
     nlp = spacy.load('en_core_web_sm')
     nlp_text = nlp(resume_text)
-    data = pd.read_csv("skill_list.csv") 
+
+    file_path = os.path.join(settings.BASE_DIR, 'website', 'skill_list.csv')
+
+
+    #file_path = os.path.join(BASE_DIR, 'path', 'to', 'skill_list.csv')
+    data = pd.read_csv(file_path)
+
+
+    #data = pd.read_csv("skill_list.csv") 
     skills = list(data.columns.values)
     skillset = []
 

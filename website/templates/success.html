@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% block content %}
+
+
+
+{% if user.is_authenticated %}
+
+<body>
+    <h1>Uploaded Files and Extracted Data</h1>
+
+
+
+    <h2>Extracted Data</h2>
+    <ul>
+        {% for data in extracted_data %}
+        <li> 
+            Name: {{ data.name }}<br>
+            Email: {{ data.email }}<br>
+            Phone: {{ data.number }}<br>
+            Skills: {{ data.skills }}<br>
+            <!-- ... Any other extracted data you want to display ... -->
+        </li>
+        {% endfor %}
+    </ul>
+</body>
+
+
+
+{% endif %}
+
+{% endblock %}

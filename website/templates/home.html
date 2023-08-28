@@ -6,8 +6,17 @@
 
 {% if user.is_authenticated %}
 
-<h1>Helloooo</h1>
 
+
+
+<ul>
+	<li> <a class="nav-link" href="{% url 'posts' %}">Job Posting and Management</a></li>
+	<li><a class="nav-link" href="{% url 'upload_form' %}">Candidate Search and Matching</a></li>
+
+
+
+
+</ul>
 
 <select class="form-select" aria-label="Default select example">
   <option selected>Select position needed</option>
@@ -17,16 +26,7 @@
 </select>
 
 
-<form   method="post" enctype="multipart/form-data">
-	{% csrf_token %}
-	<p> 	
-    {{form.file}}
-	</p>
-	<p>
-		<input type="submit" value="Upload" /> 
-	</p>
 
-</form>
 
 
 {% else %}
