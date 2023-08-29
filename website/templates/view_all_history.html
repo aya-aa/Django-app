@@ -1,0 +1,34 @@
+{% extends 'base.html' %} <!-- You can extend from your base template if you have one -->
+
+{% block content %}
+  <h1>All Positions' History</h1>
+  
+  {% for position, matched_cvs in matched_cvs_by_position.items %}
+    <h2>Position: {{ position.position }}</h2>
+
+  <table class="table table-striped table-hover table-bordered">
+  <thead class="table-dark">
+
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Number</th>
+          <th>Email</th>
+          <th>Date Matched</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for match in matched_cvs %}
+          <tr>
+            <td>{{ match.cv.name }}</td>
+            <td>{{ match.cv.phone }}</td>
+            <td>{{ match.cv.email }}</td>
+            <td>{{ match.match_date }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% endfor %}
+  
+
+{% endblock %}

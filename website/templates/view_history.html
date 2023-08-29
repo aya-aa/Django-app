@@ -1,0 +1,28 @@
+{% extends 'base.html' %} <!-- You can extend from your base template if you have one -->
+
+{% block content %}
+  <h1>Saved History for Position: {{ position.position }}</h1>
+  
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Number</th>
+        <th>Email</th>
+        <th>Date Matched</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for match in matched_cvs %}
+        <tr>
+          <td>{{ match.cv.name }}</td>
+          <td>{{ match.cv.phone }}</td>
+          <td>{{ match.cv.email }}</td>
+          <td>{{ match.match_date }}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  
+  <p><a href="{% url 'upload_success' %}">Go back to Upload Success</a></p>
+{% endblock %}
