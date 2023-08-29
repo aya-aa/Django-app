@@ -11,6 +11,9 @@
 </head>
 <body>
     <h1>Upload Successful!</h1>
+    <h2>Selected Position ID:</h2>
+
+
 
 
 <table class="table table-striped table-hover table-bordered">
@@ -27,7 +30,7 @@
 
       {% for data in extracted_data  %}
         <tr>
-          <td>position</td>
+          <td>{{ position }}</td>
           <td>{{ data.name }}</td>
           <td>{{ data.number }}</td>
           <td>{{ data.email }}</td>

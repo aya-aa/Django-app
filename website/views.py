@@ -76,6 +76,8 @@ class FileFieldFormView(FormView):
 
 	def form_valid(self, form):
 		files = self.request.FILES.getlist('file_field')
+		selected_position_id = self.request.POST.get('selected_position')
+		extracted_data_list=[]
 		for f in files:
 			my_model_instance=MyModel(name=f.name,uploaded_file=f)
 
@@ -103,7 +105,7 @@ class FileFieldFormView(FormView):
 				'email': email,
 				'skills': skills,
 				}
-			extracted_data_list=[]
+
 			extracted_data_list.append(extracted_data)
 
 
@@ -121,10 +123,15 @@ class FileFieldFormView(FormView):
 
 
 
+		selected_position_id = self.request.POST.get('selected_position')
+		instance = Post.objects.get(id=selected_position_id)
+		position= instance.position
 		context = {
 		'form': form,
 		'extracted_data': extracted_data_list,
-		'posts':posts,
+		'posts': posts,
+		'position_id': selected_position_id,
+		'position':position,
 		}
 		return render(self.request, 'success.html', context)
             
@@ -134,3 +141,4 @@ class FileFieldFormView(FormView):
 
 def upload_success(request):
     return render(request, 'success.html')
+
