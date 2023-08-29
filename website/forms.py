@@ -3,8 +3,8 @@ from cProfile import label
 
 
 class InputForm(forms.Form):
-	x=forms.IntegerField(label="Enter first Number:")
-	y=forms.IntegerField(label="Enter second number")
+    x=forms.IntegerField(label="Enter first Number:")
+    y=forms.IntegerField(label="Enter second number")
 
 
 
@@ -34,10 +34,9 @@ class FileFieldForm(forms.Form):
 
 #n7oti el form di fi milaf html
 class PrimeForm(forms.Form):
-	x=forms.IntegerField(label="Enter Number")
+    x=forms.IntegerField(label="Enter Number")
 
 
 
 #class MultiFileUploadForm(forms.Form):
  #   files = forms.FileField(widget=forms.ClearableFileInput(attrs={"allow_multiple_selected": True}))
-

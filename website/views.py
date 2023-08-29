@@ -88,10 +88,6 @@ class FileFieldFormView(FormView):
 			skills=extract_skills(extracted_text)
 
 
-			print(number.encode('utf-8'))
-			print(name.encode('utf-8'))
-			print(email.encode('utf-8'))
-			print(skills)
 
 
             # Save the extracted information in the instance

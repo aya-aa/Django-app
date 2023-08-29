@@ -10,20 +10,15 @@
 
 
 <ul>
-	<li> <a class="nav-link" href="{% url 'posts' %}">Job Posting and Management</a></li>
-	<li><a class="nav-link" href="{% url 'upload_form' %}">Candidate Search and Matching</a></li>
+  <li> <a class="nav-link" href="{% url 'posts' %}">Job Posting and Management</a></li>
+  <li><a class="nav-link" href="{% url 'upload_form' %}">Candidate Search and Matching</a></li>
 
 
 
 
 </ul>
 
-<select class="form-select" aria-label="Default select example">
-  <option selected>Select position needed</option>
-  <option value="1">One</option>
-  <option value="2">Two</option>
-  <option value="3">Three</option>
-</select>
+
 
 
 
@@ -36,7 +31,7 @@
 <br/>
 
 <form method="POST" action="{% url 'home' %}">
-	{% csrf_token %}
+  {% csrf_token %}
 
   <div class="mb-3">
     <input type="text" class="form-control" name="username", placeholder="Username" required>

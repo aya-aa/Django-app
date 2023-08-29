@@ -13,31 +13,22 @@
       <th scope="col">Skills</th>
       <th scope="col">Vacant</th>
       <th scope="col">Experience</th>
-
-
-
     </tr>
   </thead>
-
-
   <tbody>
-   
-
-{% if posts %}
-	{% for post in posts %}
-		<tr>
-			<td>{{ post.position }}</td>
-			<td>{{ post.description}}</td>
-			<td>{{ post.skills }}</td>
-			<td>{{ post.vacant }}</td>
-			<td>{{ post.experience }}</td>
-
-		</tr>
-
-	  </tbody>
-	</table>
-	{% endfor %}
+    {% if posts %}
+      {% for post in posts %}
+        <tr>
+          <td>{{ post.position }}</td>
+          <td>{{ post.description }}</td>
+          <td>{{ post.skills }}</td>
+          <td>{{ post.vacant }}</td>
+          <td>{{ post.experience }}</td>
+        </tr>
+      {% endfor %}
     {% endif %}
+  </tbody>
+</table>
 
 
 {% else %}
