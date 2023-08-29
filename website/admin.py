@@ -4,6 +4,7 @@ from .models import Post
 
 admin.site.register(Post)
 
-from .models import MyModel
+from .models import MyModel, MatchHistory
 
 admin.site.register(MyModel)
+admin.site.register(MatchHistory)

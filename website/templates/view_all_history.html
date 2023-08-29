@@ -3,13 +3,23 @@
 {% block content %}
   <h1>All Positions' History</h1>
   
+  <!-- Filter dropdown menu -->
+  <form method="GET">
+    <label for="position">Filter by Position:</label>
+    <select name="position" id="position">
+      <option value="">All Positions</option>
+      {% for position in positions %}
+        <option value="{{ position.id }}">{{ position.position }}</option>
+      {% endfor %}
+    </select>
+    <button type="submit">Apply Filter</button>
+  </form>
+  
+  <h2>Matched CVs</h2>
   {% for position, matched_cvs in matched_cvs_by_position.items %}
-    <h2>Position: {{ position.position }}</h2>
-
-  <table class="table table-striped table-hover table-bordered">
+    <h3>Position: {{ position.position }}</h3>
+<table class="table table-striped table-hover table-bordered">
   <thead class="table-dark">
-
-      <thead>
         <tr>
           <th>Name</th>
           <th>Number</th>
@@ -30,5 +40,4 @@
     </table>
   {% endfor %}
   
-
 {% endblock %}

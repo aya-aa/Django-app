@@ -13,6 +13,8 @@ urlpatterns = [
     path('save_history/', views.save_history_view, name='save_history'),
     path('view_history/<int:position_id>/', views.view_history, name='view_history'),
     path('view_all_history/', views.view_all_history, name='view_all_history'),
+    path('view_all_history/<int:position_id>/', views.view_all_history, name='view_all_history_filtered'),
+
 
 
 
@@ -20,3 +22,4 @@ urlpatterns = [
 
 
 ]
+

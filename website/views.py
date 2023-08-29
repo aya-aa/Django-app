@@ -171,30 +171,37 @@ def save_history_view(request):
 from django.shortcuts import render
 from .models import Post, MatchHistory
 
+
+
+def view_all_history(request):
+    positions = Post.objects.all()
+    selected_position_id = request.GET.get('position')
+    matched_cvs_by_position = {}
+
+    if selected_position_id:
+        # Convert the selected_position_id to an integer if not None
+        selected_position_id = int(selected_position_id)
+        selected_position = Post.objects.get(id=selected_position_id)
+        matched_cvs = MatchHistory.objects.filter(position=selected_position)
+        matched_cvs_by_position[selected_position] = matched_cvs
+    else:
+        # Display matched CVs for all positions
+        for position in positions:
+            matched_cvs = MatchHistory.objects.filter(position=position)
+            matched_cvs_by_position[position] = matched_cvs
+
+    context = {
+        'positions': positions,
+        'matched_cvs_by_position': matched_cvs_by_position,
+    }
+    return render(request, 'view_all_history.html', context)
+
+
 def view_history(request, position_id):
     position = Post.objects.get(id=position_id)
     matched_cvs = MatchHistory.objects.filter(position=position)
-
     context = {
         'position': position,
         'matched_cvs': matched_cvs,
     }
-
     return render(request, 'view_history.html', context)
-
-
-
-def view_all_history(request):
-    matched_cvs_by_position = {}
-    
-    # Retrieve all matched CVs for each position
-    positions = Post.objects.all()
-    for position in positions:
-        matched_cvs = MatchHistory.objects.filter(position=position)
-        matched_cvs_by_position[position] = matched_cvs
-
-    context = {
-        'matched_cvs_by_position': matched_cvs_by_position,
-    }
-
-    return render(request, 'view_all_history.html', context)
