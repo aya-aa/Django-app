@@ -20,7 +20,13 @@ matcher = Matcher(nlp.vocab)
 
 # Load skill data
 SKILL_DATA_PATH = os.path.join(settings.BASE_DIR, 'website', 'skill_list.csv')
-SKILLS = set(pd.read_csv(SKILL_DATA_PATH).columns)
+#SKILLS = set(pd.read_csv(SKILL_DATA_PATH).columns)
+
+# Load skills from the CSV file
+skills_df = pd.read_csv(SKILL_DATA_PATH)
+
+# Preprocess skills by converting them to lowercase
+SKILLS = set(skill.strip().lower() for skill in skills_df.columns)
 
 # Extract mobile number using regex
 def extract_mobile_number(text):

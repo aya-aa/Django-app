@@ -1,3 +1,10 @@
+
+
+
+
+
+
+
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
@@ -15,6 +22,7 @@ extract_education,
 extract_skills,)
 #timporti el function ta el test 
 
+import re
 
 
 def posts(request):
@@ -55,6 +63,10 @@ def logout_user(request):
 from django.views.generic.edit import FormView
 from .forms import FileFieldForm
 
+def preprocess_skills(skills):
+    cleaned_skills = [skill.strip().lower() for skill in skills]
+    cleaned_skills = [re.sub(r'\W+', ' ', skill) for skill in cleaned_skills]  # Remove non-alphanumeric characters
+    return set(cleaned_skills)
 
 class FileFieldFormView(FormView):
 	form_class = FileFieldForm
@@ -106,7 +118,33 @@ class FileFieldFormView(FormView):
 				'skills': skills,
 				}
 
-			extracted_data_list.append(extracted_data)
+			selected_position_id = self.request.POST.get('selected_position')
+			selected_position = Post.objects.get(id=selected_position_id)
+
+
+
+			lowercase_skills = preprocess_skills(skills)
+			my_model_skills_lower = [skill.strip().lower() for skill in skills]
+			selected_position_skills_lower = [skill.strip().lower() for skill in selected_position.skills.split(',')]
+
+
+			print("Skills from MyModel instance:")
+			print(my_model_skills_lower)
+
+			print("Skills from selected_position:")
+			print(selected_position_skills_lower)
+
+			# Check for matching skills
+			matching_skills = [skill for skill in my_model_skills_lower if skill in selected_position_skills_lower]
+
+
+
+
+			# If there are matching skills, add the extracted data to the list
+			if matching_skills:
+				extracted_data_list.append(extracted_data)
+			print("Matching skills (lowercase):")
+			print(matching_skills)
 
 
         	#my_model_instance = MyModel(name=name, email=email, phone=number, skills=skills)
@@ -123,9 +161,8 @@ class FileFieldFormView(FormView):
 
 
 
-		selected_position_id = self.request.POST.get('selected_position')
-		instance = Post.objects.get(id=selected_position_id)
-		position= instance.position
+
+		position= selected_position.position
 		context = {
 		'form': form,
 		'extracted_data': extracted_data_list,
@@ -141,4 +178,10 @@ class FileFieldFormView(FormView):
 
 def upload_success(request):
     return render(request, 'success.html')
+
+
+
+
+
+
 

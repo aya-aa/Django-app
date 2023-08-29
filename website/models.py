@@ -1,5 +1,7 @@
 from django.db import models
 
+from django.contrib.auth.models import User
+
 # Create your models here.
 from .extractdata import (
 extract_text_from_pdf2,
@@ -29,7 +31,7 @@ class MyModel(models.Model):
     institute = models.CharField(max_length=100, null=True, blank=True)
     uploaded_file = models.FileField(upload_to='uploads/',null=True, blank=True)
     #extracted_text = models.TextField()  # Store the entire extracted text
-
+'''
     def save(self, *args, **kwargs):
         # Call your extraction functions here and update fields
         self.name = extract_name(self.uploaded_file.path)
@@ -40,3 +42,28 @@ class MyModel(models.Model):
         #self.institute = extract_institute(self.uploaded_file.path)
         #self.extracted_text = extract_all_text(self.uploaded_file.path)
         super().save(*args, **kwargs)
+'''
+
+
+from django.db import models
+from django.contrib.auth.models import User
+from django.urls import reverse
+
+from django.db import models
+from django.contrib.auth.models import User
+
+class ModelSave(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    save_date = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Saved by {self.user} at {self.save_date}"
+
+class UploadHistory(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    uploaded_date = models.DateTimeField(auto_now_add=True)
+    # Link the UploadHistory model to the MyModel model (or the model you are using for saving data)
+    saved_table = models.ForeignKey('MyModel', on_delete=models.CASCADE)
+
+    def get_absolute_url(self):
+        return reverse('history_detail', args=[str(self.id)])

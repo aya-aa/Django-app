@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h1>Upload History</h1>
+  <ul>
+    {% for entry in table_data %}
+      <li>{{ entry.name }} - {{ entry.email }} - <a href="{% url 'saved-table-view' entry.id %}">View Saved Table</a></li>
+    {% endfor %}
+  </ul>
+{% endblock %}
