@@ -4,6 +4,9 @@ from .views import FileFieldFormView
 
 urlpatterns = [
     path('', views.home, name='home'),
+    path('adminpage/',views.admin_page, name='admin_page'),
+#    path('adminpage/management',views., name='admin_page'),
+
     #path('login/', views.login_user, name='login'),
     path('logout/', views.logout_user, name='logout'),
     #path('upload/'), upload_file, name='upload'),
@@ -14,9 +17,6 @@ urlpatterns = [
     path('view_history/<int:position_id>/', views.view_history, name='view_history'),
     path('view_all_history/', views.view_all_history, name='view_all_history'),
     path('view_all_history/<int:position_id>/', views.view_all_history, name='view_all_history_filtered'),
-
-
-
 
 
 

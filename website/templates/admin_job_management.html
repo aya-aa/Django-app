@@ -8,17 +8,10 @@
 
 
 
-
 <ul>
-  <li> <a class="nav-link" href="{% url 'posts' %}">Job Posting and Management</a></li>
-  <li><a class="nav-link" href="{% url 'upload_form' %}">Candidate Search and Matching</a></li>
-  <li> <a class="nav-link" href="{% url 'view_all_history' %}">View Saved History </a></li>
-
-
-
-
-
-
+    <li><a class="nav-link" href="{% url 'add_post' %}">Add Post</a></li>
+    <li><a class="nav-link" href="{% url 'edit_post' post.id %}">Edit Post</a></li>
+    <li><a class="nav-link" href="{% url 'delete_post' post.id %}">Delete Post</a></li>
 
 </ul>
 
@@ -31,16 +24,10 @@
 {% else %}
 
 <div class="col-md-6 offset-md-3">
-  <br/>
-
-
-
-
 <h1>Login</h1>
 <br/>
-<br/>
 
-<form method="post" action="{% url 'home' %}?next={{ request.path }}">
+<form method="POST" action="{% url 'home' %}">
   {% csrf_token %}
 
   <div class="mb-3">

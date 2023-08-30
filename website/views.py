@@ -1,17 +1,15 @@
-
-
-
-
-
-
-
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
-
+from .models import Post, MatchHistory
 #timporti el form eli amalteha
 from .models import Post, MyModel
-
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import user_passes_test
+from django.views.generic.edit import FormView
+from .models import Post, MyModel, MatchHistory
+from django.views.generic.edit import FormView
+from .forms import FileFieldForm
 
 from .extractdata import (
 extract_text_from_pdf2,
@@ -25,25 +23,51 @@ extract_skills,)
 import re
 
 
+
+
+
+def is_admin(user):
+    return user.groups.filter(name='admin').exists()
+
+def is_recruiter(user):
+    return user.groups.filter(name='recruiter').exists()
+
+@login_required
 def posts(request):
 	return render(request, 'posts.html', {'posts':Post.objects.all()})
 
+
+
+def is_admin(user):
+    return user.groups.filter(name='admin').exists()
+
+def is_recruiter(user):
+    return user.groups.filter(name='recruiter').exists()
+
 def home(request):
-	# Check to see if logging in
-	if request.method == 'POST':
-		username = request.POST['username']
-		password = request.POST['password']
-		# Authenticate
-		user = authenticate(request, username=username, password=password)
-		if user is not None:
-			login(request, user)
-			messages.success(request, "You Have Been Logged In!")
-			return redirect('home')
-		else:
-			messages.success(request, "There Was An Error Logging In, Please Try Again...")
-			return redirect('home')
-	else:
-		return render(request, 'home.html')
+    if request.method == 'POST':
+        username = request.POST['username']
+        password = request.POST['password']
+
+        user = authenticate(request, username=username, password=password)
+
+        if user is not None:
+            login(request, user)
+
+            if user.groups.filter(name='admin').exists():
+                return redirect('admin_page')
+
+            elif user.groups.filter(name='recruiter').exists():
+                return redirect('home')  
+
+            else:
+                messages.error(request, "You do not belong to any recognized group.")
+
+        else:
+            messages.error(request, "There Was An Error Logging In, Please Try Again...")
+
+    return render(request, 'home.html')
+
 
 
 
@@ -56,22 +80,13 @@ def logout_user(request):
 
 
 
-
-
-
-
-from django.views.generic.edit import FormView
-from .forms import FileFieldForm
-
 def preprocess_skills(skills):
     cleaned_skills = [skill.strip().lower() for skill in skills]
-    cleaned_skills = [re.sub(r'\W+', ' ', skill) for skill in cleaned_skills]  # Remove non-alphanumeric characters
+    cleaned_skills = [re.sub(r'\W+', ' ', skill) for skill in cleaned_skills]  
     return set(cleaned_skills)
-from django.shortcuts import render
-from django.views.generic.edit import FormView
-from .models import Post, MyModel, MatchHistory
-from .forms import FileFieldForm  # Import your form class here
-import re
+
+
+
 
 class FileFieldFormView(FormView):
     form_class = FileFieldForm
@@ -99,7 +114,7 @@ class FileFieldFormView(FormView):
         extracted_data_list = []
         
         for f in files:
-            # Extract text from the PDF using your function
+
             extracted_text = extract_text_from_pdf2(f)
             name = extract_name(extracted_text)
             number = extract_mobile_number(extracted_text)
@@ -114,10 +129,10 @@ class FileFieldFormView(FormView):
             my_model_skills_lower = [skill.strip().lower() for skill in skills]
             selected_position_skills_lower = [skill.strip().lower() for skill in selected_position.skills.split(',')]
             
-            # Check for matching skills
+
             matching_skills = [skill for skill in my_model_skills_lower if skill in selected_position_skills_lower]
             
-            # If there are matching skills, add the extracted data to the list
+
             if matching_skills:
                 extracted_data = {
                     'name': name,
@@ -127,7 +142,7 @@ class FileFieldFormView(FormView):
                 }
                 extracted_data_list.append(extracted_data)
                 
-                # Save the matching CV in the MatchHistory
+
                 match_history_entry = MatchHistory(position=selected_position, cv=my_model_instance)
                 match_history_entry.save()
         
@@ -149,9 +164,6 @@ def upload_success(request):
             
  
 
-
-from django.shortcuts import redirect
-from .models import Post, MatchHistory
 
 def save_history_view(request):
     if request.method == 'POST':
@@ -179,13 +191,11 @@ def view_all_history(request):
     matched_cvs_by_position = {}
 
     if selected_position_id:
-        # Convert the selected_position_id to an integer if not None
         selected_position_id = int(selected_position_id)
         selected_position = Post.objects.get(id=selected_position_id)
         matched_cvs = MatchHistory.objects.filter(position=selected_position)
         matched_cvs_by_position[selected_position] = matched_cvs
     else:
-        # Display matched CVs for all positions
         for position in positions:
             matched_cvs = MatchHistory.objects.filter(position=position)
             matched_cvs_by_position[position] = matched_cvs
@@ -205,3 +215,63 @@ def view_history(request, position_id):
         'matched_cvs': matched_cvs,
     }
     return render(request, 'view_history.html', context)
+
+
+
+
+
+@user_passes_test(is_admin, login_url='home')
+def admin_page(request):
+    next_url = request.GET.get('next')
+    if next_url:
+        return redirect(next_url)
+
+    return render(request, 'adminpannel.html')
+
+
+
+'''
+    #admin part: 
+
+
+
+# add viwe on management
+
+
+@user_passes_test(is_admin, login_url='home')
+def add_post(request):
+    if request.method == 'POST':
+        form = PostForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('admin_page')  # Redirect to the admin page after adding a post
+    else:
+        form = PostForm()
+    return render(request, 'add_post.html', {'form': form})
+
+
+
+
+@user_passes_test(is_admin, login_url='home')
+def edit_post(request, post_id):
+    post = get_object_or_404(Post, id=post_id)
+    if request.method == 'POST':
+        form = PostForm(request.POST, instance=post)
+        if form.is_valid():
+            form.save()
+            return redirect('admin_page')  # Redirect to the admin page after editing a post
+    else:
+        form = PostForm(instance=post)
+    return render(request, 'edit_post.html', {'form': form, 'post': post})
+
+
+
+
+@user_passes_test(is_admin, login_url='home')
+def delete_post(request, post_id):
+    post = get_object_or_404(Post, id=post_id)
+    if request.method == 'POST':
+        post.delete()
+        return redirect('admin_page')  # Redirect to the admin page after deleting a post
+    return render(request, 'delete_post.html', {'post': post})
+    '''

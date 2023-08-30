@@ -2,11 +2,6 @@ from django import forms
 from cProfile import label
 
 
-class InputForm(forms.Form):
-    x=forms.IntegerField(label="Enter first Number:")
-    y=forms.IntegerField(label="Enter second number")
-
-
 
 
 
@@ -32,11 +27,3 @@ class FileFieldForm(forms.Form):
     file_field = MultipleFileField()
 
 
-#n7oti el form di fi milaf html
-class PrimeForm(forms.Form):
-    x=forms.IntegerField(label="Enter Number")
-
-
-
-#class MultiFileUploadForm(forms.Form):
- #   files = forms.FileField(widget=forms.ClearableFileInput(attrs={"allow_multiple_selected": True}))

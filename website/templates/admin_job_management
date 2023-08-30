@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+
+
+{% if user.is_authenticated %}
+
+
+
+<ul>
+    <li><a class="nav-link" href="{% url 'add_post' %}">Add Post</a></li>
+    <li><a class="nav-link" href="{% url 'edit_post' post.id %}">Edit Post</a></li>
+    <li><a class="nav-link" href="{% url 'delete_post' post.id %}">Delete Post</a></li>
+    <!-- ... other links ... -->
+</ul>
