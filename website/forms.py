@@ -1,6 +1,8 @@
 from django import forms
 from cProfile import label
 
+from django import forms
+from .models import Post
 
 
 
@@ -27,3 +29,8 @@ class FileFieldForm(forms.Form):
     file_field = MultipleFileField()
 
 
+
+class PostForm(forms.ModelForm):
+    class Meta:
+        model = Post
+        fields = ['position', 'description', 'skills', 'vacant', 'experience']

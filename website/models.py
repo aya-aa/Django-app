@@ -12,7 +12,6 @@ extract_education,
 extract_skills,)
 
 class Post(models.Model):
-    id = models.IntegerField(primary_key=True)  
     position=models.CharField(max_length=60)
     description=models.CharField(max_length=300)
     skills=models.CharField(max_length=200)

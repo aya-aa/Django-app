@@ -10,6 +10,9 @@ from django.views.generic.edit import FormView
 from .models import Post, MyModel, MatchHistory
 from django.views.generic.edit import FormView
 from .forms import FileFieldForm
+from .forms import PostForm
+from django.shortcuts import  get_object_or_404
+
 
 from .extractdata import (
 extract_text_from_pdf2,
@@ -121,7 +124,6 @@ class FileFieldFormView(FormView):
             email = extract_email(extracted_text)
             skills = extract_skills(extracted_text)
             
-            # Save the extracted information in the MyModel instance
             my_model_instance = MyModel(name=name, email=email, phone=number, skills=skills)
             my_model_instance.save()
             
@@ -230,12 +232,17 @@ def admin_page(request):
 
 
 
-'''
+
     #admin part: 
 
 
 
 # add viwe on management
+@user_passes_test(is_admin, login_url='home')
+
+def admin_manage(request):
+    posts = Post.objects.all() 
+    return render(request, 'admin_job_management.html', {'posts': posts})
 
 
 @user_passes_test(is_admin, login_url='home')
@@ -244,7 +251,7 @@ def add_post(request):
         form = PostForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('admin_page')  # Redirect to the admin page after adding a post
+            return redirect('admin_page')  
     else:
         form = PostForm()
     return render(request, 'add_post.html', {'form': form})
@@ -259,7 +266,7 @@ def edit_post(request, post_id):
         form = PostForm(request.POST, instance=post)
         if form.is_valid():
             form.save()
-            return redirect('admin_page')  # Redirect to the admin page after editing a post
+            return redirect('admin_page') 
     else:
         form = PostForm(instance=post)
     return render(request, 'edit_post.html', {'form': form, 'post': post})
@@ -272,6 +279,5 @@ def delete_post(request, post_id):
     post = get_object_or_404(Post, id=post_id)
     if request.method == 'POST':
         post.delete()
-        return redirect('admin_page')  # Redirect to the admin page after deleting a post
+        return redirect('admin_page')  
     return render(request, 'delete_post.html', {'post': post})
-    '''
